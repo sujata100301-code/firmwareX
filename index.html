@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#10211d">
+    <meta name="description" content="An isolated, bounded firmware analysis workbench for licensed open-source IoT images.">
+    <title>FirmwareX | Analysis workbench</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" id="sidebar">
+        <a class="brand" href="#overview" aria-label="FirmwareX overview">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span>firmware<span class="brand-light">x</span></span>
+          <span class="brand-tag">LAB</span>
+        </a>
+        <div class="workspace-picker">
+          <span class="workspace-icon">NX</span>
+          <span class="workspace-name"><b>Northstar Lab</b><small>Research workspace</small></span>
+          <span class="chevron">⌄</span>
+        </div>
+        <span class="nav-label">WORKSPACE</span>
+        <nav class="primary-nav" aria-label="Primary navigation">
+          <button class="nav-item active" data-view="overview"><span class="nav-symbol">▦</span>Overview</button>
+          <button class="nav-item" data-view="analyses"><span class="nav-symbol">◷</span>Analyses<span class="nav-count">8</span></button>
+          <button class="nav-item" data-view="findings"><span class="nav-symbol">⌁</span>Findings<span class="nav-count alert-count">12</span></button>
+          <button class="nav-item" data-view="artifacts"><span class="nav-symbol">⌘</span>Artifacts</button>
+        </nav>
+        <span class="nav-label tools-label">TOOLS</span>
+        <nav class="primary-nav" aria-label="Tools">
+          <button class="nav-item" data-view="environment"><span class="nav-symbol">◎</span>Sandbox status</button>
+        </nav>
+        <div class="sidebar-bottom">
+          <div class="sandbox-indicator"><span class="status-pulse"></span><span><b>Isolated environment</b><small>No network route</small></span><span class="lock">⌑</span></div>
+          <form class="profile-button" method="post" action="/logout"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><span class="avatar">{{ current_user.username[:2]|upper }}</span><span class="profile-details"><b>{{ current_user.username }}</b><small>Security researcher</small></span><button class="logout-button" type="submit" title="Sign out" aria-label="Sign out">↪</button></form>
+        </div>
+      </aside>
+
+      <main class="main-area">
+        <header class="topbar">
+          <button class="mobile-menu" id="mobile-menu" aria-label="Open navigation">☰</button>
+          <div class="breadcrumbs"><span>Northstar Lab</span><span class="crumb-sep">/</span><b id="breadcrumb-current">Overview</b></div>
+          <div class="topbar-actions">
+            <span class="environment-pill"><i></i>OFFLINE ANALYSIS</span>
+            <button class="icon-button" title="Notifications" aria-label="Notifications">♧<span class="notification-dot"></span></button>
+            <button class="avatar top-avatar" aria-label="Account">AL</button>
+          </div>
+        </header>
+
+        <section class="view active-view" id="overview-view" aria-labelledby="page-title">
+          <div class="page-heading">
+            <div><p class="eyebrow">THURSDAY, OCTOBER 30, 2026 <span class="eyebrow-dot"></span> LAB STATUS NORMAL</p><h1 id="page-title">Analysis overview</h1><p class="page-subtitle">A clear view of what was unpacked, checked, and flagged.</p></div>
+            <button class="primary-button" id="new-analysis"><span>＋</span> New analysis</button>
+          </div>
+
+          <div class="demo-banner"><span class="demo-mark">i</span><p><b>Demonstration workspace</b><span>Sample results only. The analysis engine is not connected; no files are uploaded or executed here.</span></p><button id="dismiss-banner" aria-label="Dismiss notice">×</button></div>
+
+          <div class="metric-grid">
+            <article class="metric-card"><div class="metric-head"><span>Images analyzed</span><span class="metric-icon green-icon">↗</span></div><strong>08</strong><div class="metric-foot"><span class="metric-change">+2</span> this month</div><div class="metric-spark spark-green"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></article>
+            <article class="metric-card"><div class="metric-head"><span>Files extracted</span><span class="metric-icon blue-icon">⌗</span></div><strong>2,481</strong><div class="metric-foot">Across <b>8</b> root filesystems</div><div class="metric-spark spark-blue"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></article>
+            <article class="metric-card"><div class="metric-head"><span>Open findings</span><span class="metric-icon orange-icon">!</span></div><strong>12</strong><div class="metric-foot"><span class="severity-inline"><i></i> 2 high severity</span></div><div class="metric-spark spark-orange"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></article>
+            <article class="metric-card"><div class="metric-head"><span>Hardening coverage</span><span class="metric-icon dark-icon">⌑</span></div><strong>68<span class="metric-unit">%</span></strong><div class="metric-foot">Average across audited ELF files</div><div class="progress-line"><i class="progress-68"></i></div></article>
+          </div>
+
+          <section class="pipeline-section" aria-label="Analysis pipeline status">
+            <div class="section-heading"><div><h2>Pipeline activity</h2><p>Bounded stages with best-effort fallbacks</p></div><button class="text-button" data-open-view="analyses">View all analyses <span>→</span></button></div>
+            <div class="pipeline-track">
+              <div class="pipeline-step complete"><span class="step-icon">✓</span><div><b>Unpack</b><small>8 / 8 complete</small></div><span class="step-state">DONE</span></div><span class="track-line complete-line"></span>
+              <div class="pipeline-step complete"><span class="step-icon">✓</span><div><b>Static audit</b><small>142 ELF files</small></div><span class="step-state">DONE</span></div><span class="track-line complete-line"></span>
+              <div class="pipeline-step current"><span class="step-icon">◌</span><div><b>Emulation</b><small>2 nodes active</small></div><span class="step-state">RUNNING</span></div><span class="track-line"></span>
+              <div class="pipeline-step"><span class="step-icon">⌁</span><div><b>Analysis</b><small>Symbolic + fuzz</small></div></div><span class="track-line"></span>
+              <div class="pipeline-step"><span class="step-icon">▤</span><div><b>Report</b><small>CWE-classified</small></div></div>
+            </div>
+          </section>
+
+          <div class="content-grid">
+            <section class="panel recent-panel">
+              <div class="panel-heading"><div><h2>Recent analyses</h2><p>Latest firmware images in this workspace</p></div><button class="more-button" aria-label="More analysis actions">···</button></div>
+              <div class="table-scroll"><table><thead><tr><th>FIRMWARE IMAGE</th><th>ARCH</th><th>STATUS</th><th>FINDINGS</th><th>UPDATED</th><th></th></tr></thead><tbody id="recent-rows"></tbody></table></div>
+              <button class="table-footer" data-open-view="analyses">All analyses <span>→</span></button>
+            </section>
+
+            <section class="panel severity-panel">
+              <div class="panel-heading"><div><h2>Finding severity</h2><p>Across completed analyses</p></div><button class="select-like" aria-label="Period: all time">All time⌄</button></div>
+              <div class="severity-chart"><div class="donut" aria-label="2 high, 4 medium, 6 low findings"><div><b>12</b><small>FINDINGS</small></div></div><div class="severity-legend"><div><span><i class="sev high"></i>High</span><b>02</b></div><div><span><i class="sev medium"></i>Medium</span><b>04</b></div><div><span><i class="sev low"></i>Low</span><b>06</b></div></div></div>
+              <div class="severity-note"><span>ⓘ</span>Severity reflects evidence confidence and potential impact.</div>
+            </section>
+          </div>
+
+          <div class="content-grid lower-grid">
+            <section class="panel architecture-panel"><div class="panel-heading"><div><h2>Architecture coverage</h2><p>Binary inventory by target architecture</p></div><button class="plain-link" data-open-view="artifacts">Browse files →</button></div><div class="arch-list"><div><span class="arch-label"><b>MIPS</b><small>Big / little endian</small></span><span class="arch-bar"><i class="arch-78"></i></span><b class="arch-count">62</b></div><div><span class="arch-label"><b>ARM32</b><small>Little endian</small></span><span class="arch-bar"><i class="arch-58"></i></span><b class="arch-count">46</b></div><div><span class="arch-label"><b>ARM64</b><small>AArch64</small></span><span class="arch-bar"><i class="arch-26"></i></span><b class="arch-count">21</b></div><div><span class="arch-label"><b>x86_64</b><small>64-bit</small></span><span class="arch-bar"><i class="arch-16"></i></span><b class="arch-count">13</b></div></div></section>
+            <section class="panel attention-panel"><div class="panel-heading"><div><h2>Needs attention</h2><p>Items requiring analyst review</p></div><span class="attention-count">3</span></div><button class="attention-item" data-open-view="findings"><span class="attention-icon high-bg">!</span><span><b>Hardcoded credential candidate</b><small>camera-gw_2.8.1 · /etc/config/auth</small></span><span class="item-arrow">→</span></button><button class="attention-item" data-open-view="findings"><span class="attention-icon medium-bg">⌁</span><span><b>Unsafe string operation</b><small>router-rv34 · usr/sbin/httpd</small></span><span class="item-arrow">→</span></button><button class="attention-item" data-open-view="findings"><span class="attention-icon medium-bg">⌑</span><span><b>PIE not enabled</b><small>gateway-mips · usr/bin/diag</small></span><span class="item-arrow">→</span></button></section>
+          </div>
+          <footer class="page-footer"><span>FirmwareX <b>0.1.0 demo</b></span><span>All analysis data shown is synthetic</span><a href="#environment" data-open-view="environment">Isolation policy →</a></footer>
+        </section>
+
+        <section class="view secondary-view" id="analyses-view" hidden><div class="page-heading"><div><p class="eyebrow">WORKSPACE / ACTIVITY</p><h1>Analyses</h1><p class="page-subtitle">Bounded runs for licensed, open-source firmware images.</p></div><button class="primary-button" id="new-analysis-list"><span>＋</span> New analysis</button></div><div class="panel analysis-list-panel"><div class="list-toolbar"><label class="search-field"><span>⌕</span><input id="analysis-search" type="search" placeholder="Filter images or architectures" aria-label="Filter analyses"></label><span class="readonly-chip">DEMO DATA</span></div><div class="table-scroll"><table><thead><tr><th>FIRMWARE IMAGE</th><th>FORMAT</th><th>ARCH</th><th>STATUS</th><th>FINDINGS</th><th>UPDATED</th></tr></thead><tbody id="analysis-rows"></tbody></table></div></div></section>
+
+        <section class="view secondary-view" id="findings-view" hidden><div class="page-heading"><div><p class="eyebrow">WORKSPACE / REVIEW</p><h1>Findings</h1><p class="page-subtitle">Evidence-led observations for human validation, mapped to CWE.</p></div><span class="readonly-chip">12 OPEN</span></div><div class="filter-row"><button class="filter-chip selected" data-filter="all">All findings <b>12</b></button><button class="filter-chip" data-filter="High">High <b>2</b></button><button class="filter-chip" data-filter="Medium">Medium <b>4</b></button><button class="filter-chip" data-filter="Low">Low <b>6</b></button></div><div class="finding-list" id="finding-list"></div></section>
+
+        <section class="view secondary-view" id="artifacts-view" hidden><div class="page-heading"><div><p class="eyebrow">WORKSPACE / FILE SYSTEM</p><h1>Artifacts</h1><p class="page-subtitle">Extracted files and binary-hardening evidence from the selected sample.</p></div><span class="readonly-chip">CAMERA-GW_2.8.1</span></div><div class="artifact-layout"><section class="panel tree-panel"><div class="panel-heading"><div><h2>Root filesystem</h2><p>SquashFS · 18.4 MB · extracted</p></div></div><div class="file-tree" id="file-tree"></div></section><section class="panel binary-panel"><div class="panel-heading"><div><h2>Binary audit</h2><p>ELF architecture and mitigation matrix</p></div><span class="readonly-chip">5 BINARIES</span></div><div class="table-scroll"><table class="mitigation-table"><thead><tr><th>BINARY</th><th>ARCH</th><th>NX</th><th>CANARY</th><th>RELRO</th><th>PIE</th></tr></thead><tbody id="binary-rows"></tbody></table></div><div class="binary-detail"><span class="detail-kicker">SELECTED BINARY</span><b>usr/sbin/httpd</b><p>MIPS32 · little endian · dynamically linked</p><div class="cfg-preview"><div class="cfg-caption">CONTROL-FLOW GRAPH <span>BLOCKED VIEW</span></div><svg viewBox="0 0 480 138" role="img" aria-label="Illustrative control-flow graph for the selected binary"><path d="M75 35 H180 M240 35 H340 M210 58 V103 H340 M370 58 V103"/><rect x="15" y="17" width="60" height="36" rx="3"/><rect x="180" y="17" width="60" height="36" rx="3"/><rect x="340" y="17" width="100" height="36" rx="3"/><rect x="180" y="85" width="60" height="36" rx="3"/><rect x="340" y="85" width="100" height="36" rx="3"/><text x="45" y="40">entry</text><text x="210" y="40">parse</text><text x="390" y="40">handler</text><text x="210" y="108">reject</text><text x="390" y="108">response</text></svg><p>Illustrative sample only. CFG generation is not connected.</p></div></div></section></div></section>
+
+        <section class="view secondary-view" id="environment-view" hidden><div class="page-heading"><div><p class="eyebrow">TOOLS / ISOLATION</p><h1>Sandbox status</h1><p class="page-subtitle">Analysis boundaries and resource budgets for this demonstration.</p></div><span class="environment-pill"><i></i>OFFLINE ANALYSIS</span></div><div class="environment-grid"><section class="panel environment-panel"><div class="env-status"><span class="env-check">✓</span><div><b>Network isolation required</b><small>Demo UI only; no emulator or worker is attached.</small></div></div><div class="env-row"><span>External network route</span><b class="state-blocked">BLOCKED BY POLICY</b></div><div class="env-row"><span>Device access</span><b class="state-blocked">NOT CONFIGURED</b></div><div class="env-row"><span>Analysis worker</span><b class="state-pending">NOT CONNECTED</b></div><div class="env-row"><span>Execution budget</span><b>15 min / sample (planned)</b></div><div class="env-row"><span>Symbolic exploration</span><b>Bounded, selected binaries (planned)</b></div></section><aside class="safety-callout"><span>!</span><h2>Keep the worker private</h2><p>Serve the dashboard publicly only behind TLS and access controls. Run unpackers, QEMU, symbolic execution, and fuzzers in a separate isolated worker network with no route to live devices or the internet.</p></aside></div></section>
+      </main>
+    </div>
+
+    <dialog id="analysis-dialog" class="analysis-dialog">
+      <form method="dialog" class="dialog-header"><div><p class="eyebrow">DEMO WORKSPACE</p><h2>New analysis</h2></div><button class="dialog-close" aria-label="Close dialog">×</button></form>
+      <form id="analysis-form" class="dialog-body"><label class="upload-zone" for="firmware-file"><span class="upload-icon">↑</span><b id="upload-label">Choose a firmware image</b><small>Selection stays in your browser; no file is uploaded.</small><input type="file" id="firmware-file" accept=".bin,.img,.trx,.squashfs,.gz,.xz,.zip"></label><label class="checkbox-line"><input type="checkbox" required><span>I have permission to analyze this open-source firmware image.</span></label><div class="isolation-note"><span>⌑</span> This demo does not unpack, execute, or analyze files.</div><button class="primary-button dialog-submit" type="submit">Add demo entry <span>→</span></button></form>
+    </dialog>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>

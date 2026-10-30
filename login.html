@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#10211d">
+    <meta name="description" content="Sign in to the FirmwareX analysis workbench.">
+    <title>Sign in | FirmwareX</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/login.css">
+  </head>
+  <body>
+    <main class="login-shell">
+      <section class="login-panel" aria-labelledby="login-title">
+        <a class="brand" href="/" aria-label="FirmwareX"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>firmware<span class="brand-light">x</span></span><span class="brand-tag">LAB</span></a>
+        <div class="login-content">
+          <p class="eyebrow">PRIVATE RESEARCH WORKSPACE</p>
+          <h1 id="login-title">Welcome back</h1>
+          <p class="subtitle">Sign in to continue to your analysis workspace.</p>
+          {% for category, message in get_flashed_messages(with_categories=true) %}
+            <div class="alert {{ category }}" role="alert">{{ message }}</div>
+          {% endfor %}
+          <form method="post" action="{{ url_for('login') }}" class="login-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            {% if next_target %}<input type="hidden" name="next" value="{{ next_target }}">{% endif %}
+            <label for="username">Username</label>
+            <input id="username" name="username" type="text" autocomplete="username" required maxlength="64" autofocus>
+            <div class="password-label"><label for="password">Password</label></div>
+            <input id="password" name="password" type="password" autocomplete="current-password" required>
+            <button type="submit" class="submit-button">Sign in <span aria-hidden="true">→</span></button>
+          </form>
+          <p class="login-foot"><span class="lock-icon" aria-hidden="true">⌑</span> Accounts are provisioned by a workspace administrator.</p>
+          {% if setup_available %}<p class="setup-link-row"><a href="{{ url_for('setup') }}">First time here? Set up the administrator account</a></p>{% endif %}
+        </div>
+        <footer><span>FirmwareX <b>0.1.0</b></span><span>Isolated analysis environment</span></footer>
+      </section>
+      <aside class="login-aside" aria-label="Workspace security status">
+        <div class="aside-text"><span class="aside-kicker"><i></i> ISOLATION STATUS</span><h2>Built for careful<br>firmware research.</h2><p>Private access to a bounded, defensive analysis workspace.</p></div>
+        <div class="network-visual" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="network-core"><span class="core-mark"><i></i><i></i><i></i><i></i></span><b>FX</b></div><span class="node node-one"></span><span class="node node-two"></span><span class="node node-three"></span><span class="node node-four"></span><span class="network-label label-one">NO EXTERNAL ROUTE</span><span class="network-label label-two">LICENSED IMAGES ONLY</span></div>
+        <div class="aside-note"><span>●</span> No live devices connected</div>
+      </aside>
+    </main>
+  </body>
+</html>

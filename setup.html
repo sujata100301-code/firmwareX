@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#10211d">
+    <meta name="description" content="Create the first FirmwareX administrator account.">
+    <title>Set up workspace | FirmwareX</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/login.css">
+  </head>
+  <body>
+    <main class="login-shell">
+      <section class="login-panel" aria-labelledby="setup-title">
+        <a class="brand" href="/login" aria-label="FirmwareX"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>firmware<span class="brand-light">x</span></span><span class="brand-tag">LAB</span></a>
+        <div class="login-content">
+          <p class="eyebrow">ONE-TIME WORKSPACE SETUP</p>
+          <h1 id="setup-title">Create administrator</h1>
+          <p class="subtitle">This form closes automatically after the first account is created.</p>
+          {% for category, message in get_flashed_messages(with_categories=true) %}
+            <div class="alert {{ category }}" role="alert">{{ message }}</div>
+          {% endfor %}
+          <form method="post" action="{{ url_for('setup') }}" class="login-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            {% if production %}
+              <label for="setup-token">One-time setup token</label>
+              <input id="setup-token" name="setup_token" type="password" autocomplete="off" required>
+            {% endif %}
+            <label for="username">Username</label>
+            <input id="username" name="username" type="text" autocomplete="username" required minlength="3" maxlength="64" pattern="\S+" title="Use 3-64 characters with no spaces">
+            <div class="password-label"><label for="password">Password</label></div>
+            <input id="password" name="password" type="password" autocomplete="new-password" required minlength="14">
+            <div class="password-label"><label for="confirm-password">Confirm password</label></div>
+            <input id="confirm-password" name="confirm_password" type="password" autocomplete="new-password" required minlength="14">
+            <button type="submit" class="submit-button">Create account <span aria-hidden="true">→</span></button>
+          </form>
+          <p class="login-foot"><span class="lock-icon" aria-hidden="true">⌑</span> Use a unique password with at least 14 characters.</p>
+        </div>
+        <footer><span>FirmwareX <b>0.1.0</b></span><span>First account only</span></footer>
+      </section>
+      <aside class="login-aside" aria-label="Workspace security status">
+        <div class="aside-text"><span class="aside-kicker"><i></i> ISOLATION STATUS</span><h2>Built for careful<br>firmware research.</h2><p>Private access to a bounded, defensive analysis workspace.</p></div>
+        <div class="network-visual" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="network-core"><span class="core-mark"><i></i><i></i><i></i><i></i></span><b>FX</b></div><span class="node node-one"></span><span class="node node-two"></span><span class="node node-three"></span><span class="node node-four"></span><span class="network-label label-one">NO EXTERNAL ROUTE</span><span class="network-label label-two">LICENSED IMAGES ONLY</span></div>
+        <div class="aside-note"><span>●</span> No live devices connected</div>
+      </aside>
+    </main>
+  </body>
+</html>
